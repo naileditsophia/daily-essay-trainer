@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>금융논술 매일쓰기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --paper:#f3ede0;--paper2:#ece4d3;--ink:#211d16;--ink2:#5b5346;
+    --line:#d8cdb6;--pine:#2f5d50;--pine-d:#234a3f;--ochre:#b5793a;--rust:#9c4b2e;
+  }
+  body{
+    font-family:'IBM Plex Sans KR',sans-serif;color:var(--ink);line-height:1.6;
+    background:
+      radial-gradient(circle at 15% 10%,rgba(181,121,58,.07),transparent 40%),
+      radial-gradient(circle at 85% 90%,rgba(47,93,80,.07),transparent 44%),
+      var(--paper);
+    min-height:100vh;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:0 18px 80px}
+  .serif{font-family:'Nanum Myeongjo',serif}
+
+  /* Header */
+  header{padding:28px 0 14px;border-bottom:2px solid var(--ink)}
+  .kicker{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--ochre);font-weight:600}
+  h1{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:32px;line-height:1.1;margin-top:6px}
+  .subrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px;font-size:13px;color:var(--ink2)}
+  .streak{display:inline-flex;align-items:center;gap:5px;background:var(--ink);color:var(--paper);padding:3px 11px;border-radius:999px;font-weight:600;font-size:12px}
+  .targ-btn{background:none;border:none;border-bottom:1px dashed var(--ink2);color:var(--pine-d);font-family:inherit;font-weight:600;cursor:pointer;font-size:13px;padding:0}
+
+  /* Tabs */
+  nav{display:flex;gap:3px;margin-top:18px;border-bottom:1px solid var(--line)}
+  .tab{flex:1;padding:11px 4px;background:none;border:none;cursor:pointer;font-family:inherit;
+    font-size:13px;font-weight:500;color:var(--ink2);border-bottom:2px solid transparent;transition:.15s}
+  .tab:hover{color:var(--ink)}
+  .tab.on{color:var(--pine-d);border-bottom-color:var(--pine);font-weight:600}
+
+  /* Cards */
+  .card{background:var(--paper2);border:1px solid var(--line);border-radius:3px;padding:20px;margin-top:18px;box-shadow:3px 4px 0 rgba(33,29,22,.06)}
+
+  /* Mode switch */
+  .modeswitch{display:flex;background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:4px;gap:4px}
+  .mode-btn{flex:1;padding:9px 6px;border:none;background:none;cursor:pointer;font-family:inherit;border-radius:2px;font-size:13px;font-weight:600;color:var(--ink2);transition:.15s;line-height:1.3;text-align:center}
+  .mode-btn small{display:block;font-weight:400;font-size:10.5px;opacity:.7;margin-top:2px}
+  .mode-btn.on{background:var(--ink);color:var(--paper)}
+
+  /* Form */
+  label.lbl{display:block;font-size:11.5px;font-weight:600;letter-spacing:.04em;color:var(--ink2);margin:16px 0 5px;text-transform:uppercase}
+  input[type=text],textarea{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:10px 12px;font-family:inherit;font-size:14.5px;color:var(--ink);resize:vertical;line-height:1.65}
+  input[type=text]:focus,textarea:focus{outline:none;border-color:var(--pine)}
+  textarea{min-height:80px}
+  textarea.tall{min-height:200px}
+
+  /* Buttons */
+  .btn{display:inline-flex;align-items:center;gap:7px;padding:12px 18px;border:none;border-radius:2px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;transition:.15s}
+  .btn-full{width:100%;justify-content:center;margin-top:14px;font-size:15px}
+  .btn-pine{background:var(--pine);color:#fff}
+  .btn-pine:hover{background:var(--pine-d)}
+  .btn-ghost{background:none;color:var(--pine-d);border:1px solid var(--pine)}
+  .btn-ghost:hover{background:rgba(47,93,80,.06)}
+  .btn-ochre{background:var(--ochre);color:#fff}
+  .btn-ochre:hover{background:#9e6830}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+
+  /* Note */
+  .note{font-size:12px;color:var(--ink2);font-style:italic;margin-top:8px}
+
+  /* Toast */
+  #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+    background:var(--ink);color:var(--paper);padding:9px 20px;border-radius:999px;
+    font-size:13px;font-weight:500;opacity:0;transition:.3s;pointer-events:none;z-index:999;white-space:nowrap}
+  #toast.show{opacity:1}
+
+  /* Stats */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px}
+  .stat{background:var(--paper2);border:1px solid var(--line);border-radius:3px;padding:13px;text-align:center}
+  .stat b{font-family:'Nanum Myeongjo',serif;font-size:26px;display:block;color:var(--pine-d);line-height:1}
+  .stat span{font-size:11px;color:var(--ink2)}
+
+  /* History list */
+  .hentry{border-bottom:1px solid var(--line);padding:14px 2px;cursor:pointer;transition:.1s}
+  .hentry:hover{background:rgba(47,93,80,.04);padding-left:6px}
+  .hrow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .badge{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:99px;letter-spacing:.03em}
+  .badge-f{background:var(--ochre);color:#fff}
+  .badge-p{background:var(--pine);color:#fff}
+  .htopic{font-family:'Nanum Myeongjo',serif;font-size:15px;font-weight:700;margin-top:5px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hscore{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:28px;color:var(--pine-d)}
+
+  /* Detail expand */
+  .detail{padding:12px 4px 16px;display:none}
+  .detail.open{display:block}
+  .pre{white-space:pre-wrap;font-size:13.5px;line-height:1.75;background:var(--paper);
+    border-left:3px solid var(--ochre);padding:11px 13px;border-radius:2px;margin-top:8px}
+
+  /* Topics */
+  .topic-item{background:var(--paper2);border:1px solid var(--line);border-radius:3px;padding:15px;margin-top:12px;cursor:pointer;transition:.15s}
+  .topic-item:hover{border-color:var(--pine);transform:translateX(3px)}
+  .topic-q{font-family:'Nanum Myeongjo',serif;font-size:15.5px;font-weight:700;line-height:1.45}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+  .tag{font-size:11px;background:var(--paper);border:1px solid var(--line);padding:3px 9px;border-radius:99px;color:var(--ink2)}
+
+  /* Score input row */
+  .score-row{display:flex;align-items:center;gap:10px;margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:10px 12px}
+  .score-row label{font-size:12.5px;font-weight:600;color:var(--ink2);white-space:nowrap}
+  .score-row input{width:64px;background:none;border:none;border-bottom:1px solid var(--line);
+    font-family:'Nanum Myeongjo',serif;font-size:20px;font-weight:700;color:var(--pine-d);text-align:center;padding:2px}
+  .score-row input:focus{outline:none;border-color:var(--pine)}
+  .score-row span{font-size:13px;color:var(--ink2)}
+
+  .empty{text-align:center;color:var(--ink2);padding:40px 10px;font-size:14px}
+
+  @media(max-width:520px){
+    h1{font-size:26px}.tab{font-size:12px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">Daily Finance Essay · 9월 합격 프로젝트</div>
+    <h1>금융논술 매일쓰기</h1>
+    <div class="subrow">
+      <span class="streak" id="streak-badge">🔥 0일 연속</span>
+      <span>목표: <button class="targ-btn" id="targ-btn">금융 공기업 ▾</button></span>
+    </div>
+  </header>
+
+  <nav>
+    <button class="tab on" data-view="today">✍️ 오늘 쓰기</button>
+    <button class="tab" data-view="topics">💡 논제</button>
+    <button class="tab" data-view="history">📋 기록</button>
+  </nav>
+
+  <!-- TODAY VIEW -->
+  <div id="view-today" class="card">
+    <div class="modeswitch">
+      <button class="mode-btn on" data-mode="foundation">기초 다지기<small>6월 · 뉴스→내 생각</small></button>
+      <button class="mode-btn" data-mode="practice">실전 작성<small>7~8월 · 목차→본문→채점</small></button>
+    </div>
+
+    <!-- Foundation -->
+    <div id="mode-foundation">
+      <label class="lbl">📰 오늘 본 뉴스의 핵심</label>
+      <textarea id="f-news" placeholder="어떤 뉴스였는지, 무슨 일이 일어났는지 내 말로 요약해봐."></textarea>
+      <label class="lbl">💭 내 생각 (편하게, 메모처럼)</label>
+      <textarea id="f-thoughts" placeholder="이걸 보고 든 생각, 찬성/반대, 궁금한 점 등 아무렇게나 적어도 돼."></textarea>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+        <button class="btn btn-pine" id="f-save">저장</button>
+        <button class="btn btn-ghost" id="f-copy">📋 채팅 채점용 복사</button>
+      </div>
+      <p class="note">저장 후 여기 채팅에 붙여넣으면 논술식으로 가르쳐줄게.</p>
+    </div>
+
+    <!-- Practice -->
+    <div id="mode-practice" style="display:none">
+      <label class="lbl">🎯 논제</label>
+      <textarea id="p-topic" style="min-height:52px" placeholder="직접 쓰거나 '논제' 탭에서 골라와."></textarea>
+      <label class="lbl">🧭 목차 (직접 잡기)</label>
+      <textarea id="p-outline" placeholder="서론: ...&#10;본론1: ...&#10;본론2: ...&#10;결론: ..."></textarea>
+      <label class="lbl">✍️ 본문</label>
+      <textarea id="p-body" class="tall" placeholder="목차를 따라 실제 논술을 작성해봐."></textarea>
+
+      <div class="score-row">
+        <label>채팅 채점 결과</label>
+        <input type="number" id="p-score" min="0" max="100" placeholder="—" />
+        <span>/ 100점</span>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+        <button class="btn btn-pine" id="p-save">저장</button>
+        <button class="btn btn-ochre" id="p-copy">📋 채팅 채점용 복사</button>
+      </div>
+      <p class="note">복사 후 채팅에 붙여넣으면 100점 만점으로 채점해줄게. 점수 받은 후 위에 입력하고 다시 저장해.</p>
+    </div>
+  </div>
+
+  <!-- TOPICS VIEW -->
+  <div id="view-topics" class="card" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div class="lbl" style="margin:0">출제 가능 논제</div>
+    </div>
+    <p class="note" style="margin-top:6px">누르면 실전 작성에 자동으로 채워져. (API 키 연결 후 최신 이슈 기반 자동 생성 가능)</p>
+    <div id="topic-list"></div>
+  </div>
+
+  <!-- HISTORY VIEW -->
+  <div id="view-history" class="card" style="display:none">
+    <div class="stats">
+      <div class="stat"><b id="stat-total">0</b><span>전체 기록</span></div>
+      <div class="stat"><b id="stat-graded">0</b><span>채점받은 글</span></div>
+      <div class="stat"><b id="stat-avg">—</b><span>평균 점수</span></div>
+    </div>
+    <div id="history-list" style="margin-top:8px"></div>
+  </div>
+</div>
+
+<div id="toast">복사됐어 ✓</div>
+
+<script>
+// ── Storage ──────────────────────────────────────────────────
+const LS = {
+  entries: () => JSON.parse(localStorage.getItem('fe_entries') || '[]'),
+  save: (arr) => localStorage.setItem('fe_entries', JSON.stringify(arr)),
+  target: () => localStorage.getItem('fe_target') || '금융 공기업',
+  setTarget: (t) => localStorage.setItem('fe_target', t),
+};
+
+// ── Seed topics ───────────────────────────────────────────────
+const TOPICS = [
+  { q: '고금리 장기화 국면에서 가계부채 연착륙을 위한 금융정책 방향을 논하라.', tags: ['가계부채','통화정책','금융안정'] },
+  { q: '부동산 PF 부실 위험에 대응하기 위한 금융권의 역할과 정책 과제를 서술하라.', tags: ['부동산PF','건전성규제','구조조정'] },
+  { q: '디지털금융 확산이 금융 소비자 보호에 주는 기회와 위험을 균형 있게 논하라.', tags: ['디지털금융','소비자보호','핀테크'] },
+  { q: '중소기업·소상공인 금융지원의 효과성과 도덕적 해이 문제를 어떻게 조화시킬 것인가.', tags: ['서민금융','도덕적해이','보증제도'] },
+  { q: '기후위기 대응을 위한 금융기관의 ESG 역할과 그린워싱 리스크를 논하라.', tags: ['ESG','기후금융','그린워싱'] },
+  { q: '고령화 사회에서 금융기관이 갖춰야 할 금융복지 역할을 논하라.', tags: ['고령화','금융복지','서민금융'] },
+  { q: '환율 급변동 시 수출입 기업 지원을 위한 금융정책 방안을 서술하라.', tags: ['환율','외환정책','무역금융'] },
+];
+
+// ── Date helpers ──────────────────────────────────────────────
+const today = () => new Date().toISOString().slice(0,10);
+const fmtKo = (iso) => {
+  const d = new Date(iso + 'T00:00:00');
+  return `${d.getMonth()+1}월 ${d.getDate()}일 (${['일','월','화','수','목','금','토'][d.getDay()]})`;
+};
+const calcStreak = (entries) => {
+  const days = new Set(entries.map(e => e.date));
+  let s = 0, d = new Date();
+  for (;;) {
+    const iso = d.toISOString().slice(0,10);
+    if (days.has(iso)) { s++; d.setDate(d.getDate()-1); }
+    else if (iso === today() && s === 0) { d.setDate(d.getDate()-1); }
+    else break;
+    if (s > 366) break;
+  }
+  return s;
+};
+
+// ── Toast ─────────────────────────────────────────────────────
+const toast = (msg) => {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2000);
+};
+
+// ── Copy helpers ──────────────────────────────────────────────
+const copyFoundation = () => {
+  const news = document.getElementById('f-news').value.trim();
+  const thoughts = document.getElementById('f-thoughts').value.trim();
+  if (!news && !thoughts) { toast('내용을 먼저 입력해줘'); return; }
+  const target = LS.target();
+  const text = [
+    `📋 금융논술 기초 코칭 요청`,
+    ``,
+    `🗓 날짜: ${fmtKo(today())}`,
+    `🏛 목표 기관: ${target}`,
+    ``,
+    `📰 오늘 본 뉴스의 핵심:`,
+    news,
+    ``,
+    `💭 내 생각:`,
+    thoughts,
+    ``,
+    `---`,
+    `위 메모를 금융논술 서론·본론·결론 개요로 다시 짜주고, 왜 그렇게 쓰는지 가르쳐줘. 놓친 논점도 짚어줘.`,
+  ].join('\n');
+  navigator.clipboard.writeText(text).then(() => toast('복사됐어 ✓ 채팅에 붙여넣어봐'));
+};
+
+const copyPractice = () => {
+  const topic = document.getElementById('p-topic').value.trim();
+  const outline = document.getElementById('p-outline').value.trim();
+  const body = document.getElementById('p-body').value.trim();
+  if (!topic || !body) { toast('논제와 본문은 필수야'); return; }
+  const target = LS.target();
+  const text = [
+    `📋 금융논술 채점 요청`,
+    ``,
+    `🗓 날짜: ${fmtKo(today())}`,
+    `🏛 목표 기관: ${target}`,
+    ``,
+    `📌 논제:`,
+    topic,
+    ``,
+    outline ? `📑 목차:\n${outline}\n` : '',
+    `✍️ 본문:`,
+    body,
+    ``,
+    `---`,
+    `채점 기준(100점): 논제이해(15) / 논리구성(20) / 금융·경제지식(25) / 균형성(15) / 대안제시(15) / 표현(10)`,
+    `항목별 점수+코멘트, 잘한점 2개, 고칠점 3개, 한 단계 높은 답안 방향, 추천 다음 연습 1개로 채점해줘.`,
+  ].filter(l => l !== undefined).join('\n');
+  navigator.clipboard.writeText(text).then(() => toast('복사됐어 ✓ 채팅에 붙여넣어봐'));
+};
+
+// ── Save helpers ──────────────────────────────────────────────
+const saveFoundation = () => {
+  const news = document.getElementById('f-news').value.trim();
+  const thoughts = document.getElementById('f-thoughts').value.trim();
+  if (!news && !thoughts) { toast('내용을 입력해줘'); return; }
+  const entries = LS.entries();
+  entries.unshift({ id: Date.now(), date: today(), mode: 'foundation', news, thoughts });
+  LS.save(entries);
+  document.getElementById('f-news').value = '';
+  document.getElementById('f-thoughts').value = '';
+  updateHeader();
+  toast('저장됐어 ✓');
+};
+
+const savePractice = () => {
+  const topic = document.getElementById('p-topic').value.trim();
+  const outline = document.getElementById('p-outline').value.trim();
+  const body = document.getElementById('p-body').value.trim();
+  const scoreStr = document.getElementById('p-score').value;
+  const score = scoreStr ? parseInt(scoreStr) : null;
+  if (!topic) { toast('논제를 입력해줘'); return; }
+  const entries = LS.entries();
+  entries.unshift({ id: Date.now(), date: today(), mode: 'practice', topic, outline, body, score });
+  LS.save(entries);
+  document.getElementById('p-topic').value = '';
+  document.getElementById('p-outline').value = '';
+  document.getElementById('p-body').value = '';
+  document.getElementById('p-score').value = '';
+  updateHeader();
+  toast('저장됐어 ✓');
+};
+
+// ── Header ────────────────────────────────────────────────────
+const updateHeader = () => {
+  const entries = LS.entries();
+  const s = calcStreak(entries);
+  document.getElementById('streak-badge').textContent = `🔥 ${s}일 연속`;
+  document.getElementById('targ-btn').textContent = LS.target() + ' ▾';
+};
+
+// ── Views ─────────────────────────────────────────────────────
+const showView = (name) => {
+  ['today','topics','history'].forEach(v => {
+    document.getElementById(`view-${v}`).style.display = v === name ? '' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.view === name));
+  if (name === 'history') renderHistory();
+  if (name === 'topics') renderTopics();
+};
+
+// ── Topics render ─────────────────────────────────────────────
+const renderTopics = () => {
+  const list = document.getElementById('topic-list');
+  list.innerHTML = TOPICS.map(t => `
+    <div class="topic-item" data-q="${encodeURIComponent(t.q)}">
+      <div class="topic-q">${t.q}</div>
+      <div class="tags">${t.tags.map(k => `<span class="tag">#${k}</span>`).join('')}</div>
+    </div>
+  `).join('');
+  list.querySelectorAll('.topic-item').forEach(el => {
+    el.addEventListener('click', () => {
+      document.getElementById('p-topic').value = decodeURIComponent(el.dataset.q);
+      document.getElementById('mode-foundation').style.display = 'none';
+      document.getElementById('mode-practice').style.display = '';
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('on', b.dataset.mode === 'practice'));
+      showView('today');
+      toast('논제 채워졌어 ✓ 목차·본문 작성해봐');
+    });
+  });
+};
+
+// ── History render ────────────────────────────────────────────
+const renderHistory = () => {
+  const entries = LS.entries();
+  const graded = entries.filter(e => e.mode === 'practice' && e.score != null);
+  const avg = graded.length ? Math.round(graded.reduce((s,e)=>s+e.score,0)/graded.length) : null;
+  document.getElementById('stat-total').textContent = entries.length;
+  document.getElementById('stat-graded').textContent = graded.length;
+  document.getElementById('stat-avg').textContent = avg != null ? avg : '—';
+
+  const list = document.getElementById('history-list');
+  if (!entries.length) { list.innerHTML = '<div class="empty">아직 기록이 없어.<br>오늘 쓰기에서 첫 글을 써보자 ✍️</div>'; return; }
+
+  list.innerHTML = entries.map(e => `
+    <div class="hentry" data-id="${e.id}">
+      <div class="hrow">
+        <div style="min-width:0;flex:1">
+          <span class="badge ${e.mode==='foundation'?'badge-f':'badge-p'}">${e.mode==='foundation'?'기초':'실전'}</span>
+          <span style="font-size:12px;color:var(--ink2);margin-left:8px">${fmtKo(e.date)}</span>
+          <div class="htopic">${e.mode==='foundation'?'뉴스메모':e.topic}</div>
+        </div>
+        ${e.score!=null ? `<span class="hscore">${e.score}</span>` : ''}
+      </div>
+      <div class="detail" id="detail-${e.id}">
+        ${e.mode==='foundation' ? `
+          <div class="pre"><b>뉴스:</b>\n${e.news||''}</div>
+          <div class="pre" style="margin-top:8px"><b>내 생각:</b>\n${e.thoughts||''}</div>
+        ` : `
+          ${e.outline?`<div class="pre"><b>목차:</b>\n${e.outline}</div>`:''}
+          <div class="pre" style="margin-top:8px"><b>본문:</b>\n${(e.body||'').slice(0,300)}${(e.body||'').length>300?'\n...':''}</div>
+          <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <label style="font-size:12.5px;font-weight:600;color:var(--ink2)">점수 수정:</label>
+            <input type="number" min="0" max="100" value="${e.score??''}" class="score-edit" data-id="${e.id}"
+              style="width:58px;border:none;border-bottom:1px solid var(--line);background:none;font-family:'Nanum Myeongjo',serif;font-size:18px;font-weight:700;color:var(--pine-d);text-align:center;padding:2px">
+            <span style="font-size:12.5px;color:var(--ink2)">/ 100</span>
+            <button class="btn btn-ghost score-save" data-id="${e.id}" style="padding:5px 12px;font-size:12.5px">저장</button>
+          </div>
+        `}
+      </div>
+    </div>
+  `).join('');
+
+  list.querySelectorAll('.hentry').forEach(el => {
+    el.addEventListener('click', (ev) => {
+      if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'BUTTON') return;
+      const detail = document.getElementById(`detail-${el.dataset.id}`);
+      detail.classList.toggle('open');
+    });
+  });
+  list.querySelectorAll('.score-save').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = parseInt(btn.dataset.id);
+      const input = list.querySelector(`.score-edit[data-id="${id}"]`);
+      const score = input.value ? parseInt(input.value) : null;
+      const entries = LS.entries();
+      const idx = entries.findIndex(e => e.id === id);
+      if (idx>=0) { entries[idx].score = score; LS.save(entries); }
+      renderHistory();
+      toast('점수 저장됐어 ✓');
+    });
+  });
+};
+
+// ── Event listeners ───────────────────────────────────────────
+document.querySelectorAll('.tab').forEach(t =>
+  t.addEventListener('click', () => showView(t.dataset.view))
+);
+document.querySelectorAll('.mode-btn').forEach(btn =>
+  btn.addEventListener('click', () => {
+    const m = btn.dataset.mode;
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('on', b.dataset.mode===m));
+    document.getElementById('mode-foundation').style.display = m==='foundation'?'':'none';
+    document.getElementById('mode-practice').style.display = m==='practice'?'':'none';
+  })
+);
+document.getElementById('f-save').addEventListener('click', saveFoundation);
+document.getElementById('f-copy').addEventListener('click', copyFoundation);
+document.getElementById('p-save').addEventListener('click', savePractice);
+document.getElementById('p-copy').addEventListener('click', copyPractice);
+document.getElementById('targ-btn').addEventListener('click', () => {
+  const t = window.prompt('목표 기관/직렬을 적어줘', LS.target());
+  if (t) { LS.setTarget(t.trim()); updateHeader(); }
+});
+
+// ── Init ──────────────────────────────────────────────────────
+updateHeader();
+renderTopics();
+
+// TODO: API 키 발급 후 아래 주석 해제하면 앱 내 자동 채점 활성화
+// const API_KEY = 'sk-ant-...';  // 발급받은 키 입력
+</script>
+</body>
+</html>

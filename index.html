@@ -7,370 +7,624 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  :root{
-    --paper:#f3ede0;--paper2:#ece4d3;--ink:#211d16;--ink2:#5b5346;
-    --line:#d8cdb6;--pine:#2f5d50;--pine-d:#234a3f;--ochre:#b5793a;--rust:#9c4b2e;
-  }
-  body{
-    font-family:'IBM Plex Sans KR',sans-serif;color:var(--ink);line-height:1.6;
-    background:
-      radial-gradient(circle at 15% 10%,rgba(181,121,58,.07),transparent 40%),
-      radial-gradient(circle at 85% 90%,rgba(47,93,80,.07),transparent 44%),
-      var(--paper);
-    min-height:100vh;
-  }
-  .wrap{max-width:720px;margin:0 auto;padding:0 18px 80px}
-  .serif{font-family:'Nanum Myeongjo',serif}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --paper:#f3ede0;--paper2:#ece4d3;--paper3:#e4dbc8;--ink:#211d16;--ink2:#5b5346;
+  --line:#d8cdb6;--pine:#2f5d50;--pine-d:#234a3f;--pine-l:#e8f0ee;
+  --ochre:#b5793a;--rust:#9c4b2e;--amber:#d4960f;
+}
+body{
+  font-family:'IBM Plex Sans KR',sans-serif;color:var(--ink);line-height:1.6;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(181,121,58,.07),transparent 40%),
+    radial-gradient(circle at 85% 90%,rgba(47,93,80,.07),transparent 44%),
+    var(--paper);
+  min-height:100vh;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px 100px}
 
-  /* Header */
-  header{padding:28px 0 14px;border-bottom:2px solid var(--ink)}
-  .kicker{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--ochre);font-weight:600}
-  h1{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:32px;line-height:1.1;margin-top:6px}
-  .subrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px;font-size:13px;color:var(--ink2)}
-  .streak{display:inline-flex;align-items:center;gap:5px;background:var(--ink);color:var(--paper);padding:3px 11px;border-radius:999px;font-weight:600;font-size:12px}
-  .targ-btn{background:none;border:none;border-bottom:1px dashed var(--ink2);color:var(--pine-d);font-family:inherit;font-weight:600;cursor:pointer;font-size:13px;padding:0}
+/* ── Header ── */
+header{padding:28px 0 14px;border-bottom:2px solid var(--ink)}
+.kicker{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--ochre);font-weight:600}
+h1{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:32px;line-height:1.1;margin-top:6px}
+.subrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px;font-size:13px;color:var(--ink2)}
+.streak{display:inline-flex;align-items:center;gap:5px;background:var(--ink);color:var(--paper);padding:3px 11px;border-radius:999px;font-weight:600;font-size:12px}
+.targ-btn{background:none;border:none;border-bottom:1px dashed var(--ink2);color:var(--pine-d);font-family:inherit;font-weight:600;cursor:pointer;font-size:13px;padding:0}
+.sync-status{font-size:11.5px;color:var(--ink2);display:flex;align-items:center;gap:5px}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:#aaa;flex-shrink:0}
+.sync-dot.ok{background:#4caf50}
+.sync-dot.err{background:#e53935}
+.sync-dot.ing{background:var(--amber);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-  /* Tabs */
-  nav{display:flex;gap:3px;margin-top:18px;border-bottom:1px solid var(--line)}
-  .tab{flex:1;padding:11px 4px;background:none;border:none;cursor:pointer;font-family:inherit;
-    font-size:13px;font-weight:500;color:var(--ink2);border-bottom:2px solid transparent;transition:.15s}
-  .tab:hover{color:var(--ink)}
-  .tab.on{color:var(--pine-d);border-bottom-color:var(--pine);font-weight:600}
+/* ── Tabs ── */
+nav{display:flex;gap:3px;margin-top:18px;border-bottom:1px solid var(--line)}
+.tab{flex:1;padding:11px 4px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;color:var(--ink2);border-bottom:2px solid transparent;transition:.15s}
+.tab:hover{color:var(--ink)}
+.tab.on{color:var(--pine-d);border-bottom-color:var(--pine);font-weight:600}
 
-  /* Cards */
-  .card{background:var(--paper2);border:1px solid var(--line);border-radius:3px;padding:20px;margin-top:18px;box-shadow:3px 4px 0 rgba(33,29,22,.06)}
+/* ── Card ── */
+.card{background:var(--paper2);border:1px solid var(--line);border-radius:3px;padding:20px;margin-top:18px;box-shadow:3px 4px 0 rgba(33,29,22,.06)}
 
-  /* Mode switch */
-  .modeswitch{display:flex;background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:4px;gap:4px}
-  .mode-btn{flex:1;padding:9px 6px;border:none;background:none;cursor:pointer;font-family:inherit;border-radius:2px;font-size:13px;font-weight:600;color:var(--ink2);transition:.15s;line-height:1.3;text-align:center}
-  .mode-btn small{display:block;font-weight:400;font-size:10.5px;opacity:.7;margin-top:2px}
-  .mode-btn.on{background:var(--ink);color:var(--paper)}
+/* ── Mode switch ── */
+.modeswitch{display:flex;background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:4px;gap:4px}
+.mode-btn{flex:1;padding:9px 6px;border:none;background:none;cursor:pointer;font-family:inherit;border-radius:2px;font-size:13px;font-weight:600;color:var(--ink2);transition:.15s;line-height:1.3;text-align:center}
+.mode-btn small{display:block;font-weight:400;font-size:10.5px;opacity:.7;margin-top:2px}
+.mode-btn.on{background:var(--ink);color:var(--paper)}
 
-  /* Form */
-  label.lbl{display:block;font-size:11.5px;font-weight:600;letter-spacing:.04em;color:var(--ink2);margin:16px 0 5px;text-transform:uppercase}
-  input[type=text],textarea{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:10px 12px;font-family:inherit;font-size:14.5px;color:var(--ink);resize:vertical;line-height:1.65}
-  input[type=text]:focus,textarea:focus{outline:none;border-color:var(--pine)}
-  textarea{min-height:80px}
-  textarea.tall{min-height:200px}
+/* ── Form ── */
+label.lbl{display:block;font-size:11.5px;font-weight:600;letter-spacing:.04em;color:var(--ink2);margin:16px 0 5px;text-transform:uppercase}
+input[type=text],input[type=password],input[type=number],textarea{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:10px 12px;font-family:inherit;font-size:14.5px;color:var(--ink);resize:vertical;line-height:1.65}
+input[type=text]:focus,input[type=password]:focus,input[type=number]:focus,textarea:focus{outline:none;border-color:var(--pine)}
+textarea{min-height:80px}
+textarea.tall{min-height:180px}
 
-  /* Buttons */
-  .btn{display:inline-flex;align-items:center;gap:7px;padding:12px 18px;border:none;border-radius:2px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;transition:.15s}
-  .btn-full{width:100%;justify-content:center;margin-top:14px;font-size:15px}
-  .btn-pine{background:var(--pine);color:#fff}
-  .btn-pine:hover{background:var(--pine-d)}
-  .btn-ghost{background:none;color:var(--pine-d);border:1px solid var(--pine)}
-  .btn-ghost:hover{background:rgba(47,93,80,.06)}
-  .btn-ochre{background:var(--ochre);color:#fff}
-  .btn-ochre:hover{background:#9e6830}
-  .btn:disabled{opacity:.5;cursor:not-allowed}
+/* ── 4-panel article grid ── */
+.article-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:12px}
+.panel-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ochre);margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.panel-label .pl-icon{font-size:14px}
+.panel textarea{background:transparent;border:none;border-bottom:1px solid var(--line);border-radius:0;padding:6px 0;font-size:13.5px;min-height:90px;resize:vertical}
+.panel textarea:focus{border-color:var(--pine)}
+@media(max-width:560px){.article-grid{grid-template-columns:1fr}}
 
-  /* Note */
-  .note{font-size:12px;color:var(--ink2);font-style:italic;margin-top:8px}
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:12px 18px;border:none;border-radius:2px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;transition:.15s}
+.btn-full{width:100%;justify-content:center;margin-top:10px}
+.btn-pine{background:var(--pine);color:#fff}
+.btn-pine:hover{background:var(--pine-d)}
+.btn-ghost{background:none;color:var(--pine-d);border:1px solid var(--pine)}
+.btn-ghost:hover{background:rgba(47,93,80,.06)}
+.btn-ochre{background:var(--ochre);color:#fff}
+.btn-ochre:hover{background:#9e6830}
+.btn-sm{padding:8px 14px;font-size:13px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 
-  /* Toast */
-  #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-    background:var(--ink);color:var(--paper);padding:9px 20px;border-radius:999px;
-    font-size:13px;font-weight:500;opacity:0;transition:.3s;pointer-events:none;z-index:999;white-space:nowrap}
-  #toast.show{opacity:1}
+/* ── Note ── */
+.note{font-size:12px;color:var(--ink2);font-style:italic;margin-top:8px}
 
-  /* Stats */
-  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px}
-  .stat{background:var(--paper2);border:1px solid var(--line);border-radius:3px;padding:13px;text-align:center}
-  .stat b{font-family:'Nanum Myeongjo',serif;font-size:26px;display:block;color:var(--pine-d);line-height:1}
-  .stat span{font-size:11px;color:var(--ink2)}
+/* ── Toast ── */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+background:var(--ink);color:var(--paper);padding:9px 20px;border-radius:999px;
+font-size:13px;font-weight:500;opacity:0;transition:.3s;pointer-events:none;z-index:999;white-space:nowrap}
+#toast.show{opacity:1}
 
-  /* History list */
-  .hentry{border-bottom:1px solid var(--line);padding:14px 2px;cursor:pointer;transition:.1s}
-  .hentry:hover{background:rgba(47,93,80,.04);padding-left:6px}
-  .hrow{display:flex;justify-content:space-between;align-items:center;gap:10px}
-  .badge{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:99px;letter-spacing:.03em}
-  .badge-f{background:var(--ochre);color:#fff}
-  .badge-p{background:var(--pine);color:#fff}
-  .htopic{font-family:'Nanum Myeongjo',serif;font-size:15px;font-weight:700;margin-top:5px;
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .hscore{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:28px;color:var(--pine-d)}
+/* ── Stats ── */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px}
+.stat{background:var(--paper2);border:1px solid var(--line);border-radius:3px;padding:13px;text-align:center}
+.stat b{font-family:'Nanum Myeongjo',serif;font-size:26px;display:block;color:var(--pine-d);line-height:1}
+.stat span{font-size:11px;color:var(--ink2)}
 
-  /* Detail expand */
-  .detail{padding:12px 4px 16px;display:none}
-  .detail.open{display:block}
-  .pre{white-space:pre-wrap;font-size:13.5px;line-height:1.75;background:var(--paper);
-    border-left:3px solid var(--ochre);padding:11px 13px;border-radius:2px;margin-top:8px}
+/* ── History list ── */
+.hentry{border-bottom:1px solid var(--line);padding:14px 2px;cursor:pointer;transition:.1s}
+.hentry:hover{background:rgba(47,93,80,.04);padding-left:6px}
+.hrow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.badge{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:99px;letter-spacing:.03em}
+.badge-f{background:var(--ochre);color:#fff}
+.badge-p{background:var(--pine);color:#fff}
+.htopic{font-family:'Nanum Myeongjo',serif;font-size:15px;font-weight:700;margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hscore{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:28px;color:var(--pine-d)}
 
-  /* Topics */
-  .topic-item{background:var(--paper2);border:1px solid var(--line);border-radius:3px;padding:15px;margin-top:12px;cursor:pointer;transition:.15s}
-  .topic-item:hover{border-color:var(--pine);transform:translateX(3px)}
-  .topic-q{font-family:'Nanum Myeongjo',serif;font-size:15.5px;font-weight:700;line-height:1.45}
-  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
-  .tag{font-size:11px;background:var(--paper);border:1px solid var(--line);padding:3px 9px;border-radius:99px;color:var(--ink2)}
+/* ── Detail expand ── */
+.detail{padding:12px 4px 16px;display:none}
+.detail.open{display:block}
+.pre{white-space:pre-wrap;font-size:13px;line-height:1.75;background:var(--paper);border-left:3px solid var(--ochre);padding:11px 13px;border-radius:2px;margin-top:6px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.detail-panel{background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:10px}
+.dp-label{font-size:10.5px;font-weight:700;color:var(--ochre);letter-spacing:.05em;margin-bottom:5px}
+.dp-text{font-size:13px;line-height:1.7;white-space:pre-wrap}
+@media(max-width:560px){.detail-grid{grid-template-columns:1fr}}
 
-  /* Score input row */
-  .score-row{display:flex;align-items:center;gap:10px;margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:10px 12px}
-  .score-row label{font-size:12.5px;font-weight:600;color:var(--ink2);white-space:nowrap}
-  .score-row input{width:64px;background:none;border:none;border-bottom:1px solid var(--line);
-    font-family:'Nanum Myeongjo',serif;font-size:20px;font-weight:700;color:var(--pine-d);text-align:center;padding:2px}
-  .score-row input:focus{outline:none;border-color:var(--pine)}
-  .score-row span{font-size:13px;color:var(--ink2)}
+/* ── Topics ── */
+.topic-item{background:var(--paper2);border:1px solid var(--line);border-radius:3px;padding:15px;margin-top:12px;cursor:pointer;transition:.15s}
+.topic-item:hover{border-color:var(--pine);transform:translateX(3px)}
+.topic-q{font-family:'Nanum Myeongjo',serif;font-size:15.5px;font-weight:700;line-height:1.45}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.tag{font-size:11px;background:var(--paper);border:1px solid var(--line);padding:3px 9px;border-radius:99px;color:var(--ink2)}
+.topic-gen-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
 
-  .empty{text-align:center;color:var(--ink2);padding:40px 10px;font-size:14px}
+/* ── Score row ── */
+.score-row{display:flex;align-items:center;gap:10px;margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:10px 12px}
+.score-row label{font-size:12.5px;font-weight:600;color:var(--ink2);white-space:nowrap}
+.score-row input{width:64px;background:none;border:none;border-bottom:1px solid var(--line);font-family:'Nanum Myeongjo',serif;font-size:20px;font-weight:700;color:var(--pine-d);text-align:center;padding:2px}
+.score-row input:focus{outline:none;border-color:var(--pine)}
+.score-row span{font-size:13px;color:var(--ink2)}
 
-  @media(max-width:520px){
-    h1{font-size:26px}.tab{font-size:12px}
-  }
+/* ── Settings ── */
+.settings-section{margin-top:18px}
+.settings-section h3{font-family:'Nanum Myeongjo',serif;font-size:16px;font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink2);margin-bottom:5px}
+.help{font-size:11.5px;color:var(--ink2);margin-top:4px}
+.help a{color:var(--pine-d)}
+
+/* ── Loading spinner ── */
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin-ink{border-color:rgba(33,29,22,.2);border-top-color:var(--ink)}
+
+.empty{text-align:center;color:var(--ink2);padding:40px 10px;font-size:14px}
+
+@media(max-width:520px){h1{font-size:26px}.tab{font-size:12px}.stats{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div class="kicker">Daily Finance Essay · 9월 합격 프로젝트</div>
-    <h1>금융논술 매일쓰기</h1>
-    <div class="subrow">
-      <span class="streak" id="streak-badge">🔥 0일 연속</span>
-      <span>목표: <button class="targ-btn" id="targ-btn">금융 공기업 ▾</button></span>
-    </div>
-  </header>
+<header>
+  <div class="kicker">Daily Finance Essay · 9월 합격 프로젝트</div>
+  <h1>금융논술 매일쓰기</h1>
+  <div class="subrow">
+    <span class="streak" id="streak-badge">🔥 0일 연속</span>
+    <span>목표: <button class="targ-btn" id="targ-btn">금융 공기업 ▾</button></span>
+    <span class="sync-status"><span class="sync-dot" id="sync-dot"></span><span id="sync-msg">GitHub 미연결</span></span>
+  </div>
+</header>
 
-  <nav>
-    <button class="tab on" data-view="today">✍️ 오늘 쓰기</button>
-    <button class="tab" data-view="topics">💡 논제</button>
-    <button class="tab" data-view="history">📋 기록</button>
-  </nav>
+<nav>
+  <button class="tab on" data-view="today">✍️ 오늘 쓰기</button>
+  <button class="tab" data-view="topics">💡 논제</button>
+  <button class="tab" data-view="history">📋 기록</button>
+  <button class="tab" data-view="settings">⚙️ 설정</button>
+</nav>
 
-  <!-- TODAY VIEW -->
-  <div id="view-today" class="card">
-    <div class="modeswitch">
-      <button class="mode-btn on" data-mode="foundation">기초 다지기<small>6월 · 뉴스→내 생각</small></button>
-      <button class="mode-btn" data-mode="practice">실전 작성<small>7~8월 · 목차→본문→채점</small></button>
-    </div>
-
-    <!-- Foundation -->
-    <div id="mode-foundation">
-      <label class="lbl">📰 오늘 본 뉴스의 핵심</label>
-      <textarea id="f-news" placeholder="어떤 뉴스였는지, 무슨 일이 일어났는지 내 말로 요약해봐."></textarea>
-      <label class="lbl">💭 내 생각 (편하게, 메모처럼)</label>
-      <textarea id="f-thoughts" placeholder="이걸 보고 든 생각, 찬성/반대, 궁금한 점 등 아무렇게나 적어도 돼."></textarea>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
-        <button class="btn btn-pine" id="f-save">저장</button>
-        <button class="btn btn-ghost" id="f-copy">📋 채팅 채점용 복사</button>
-      </div>
-      <p class="note">저장 후 여기 채팅에 붙여넣으면 논술식으로 가르쳐줄게.</p>
-    </div>
-
-    <!-- Practice -->
-    <div id="mode-practice" style="display:none">
-      <label class="lbl">🎯 논제</label>
-      <textarea id="p-topic" style="min-height:52px" placeholder="직접 쓰거나 '논제' 탭에서 골라와."></textarea>
-      <label class="lbl">🧭 목차 (직접 잡기)</label>
-      <textarea id="p-outline" placeholder="서론: ...&#10;본론1: ...&#10;본론2: ...&#10;결론: ..."></textarea>
-      <label class="lbl">✍️ 본문</label>
-      <textarea id="p-body" class="tall" placeholder="목차를 따라 실제 논술을 작성해봐."></textarea>
-
-      <div class="score-row">
-        <label>채팅 채점 결과</label>
-        <input type="number" id="p-score" min="0" max="100" placeholder="—" />
-        <span>/ 100점</span>
-      </div>
-
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
-        <button class="btn btn-pine" id="p-save">저장</button>
-        <button class="btn btn-ochre" id="p-copy">📋 채팅 채점용 복사</button>
-      </div>
-      <p class="note">복사 후 채팅에 붙여넣으면 100점 만점으로 채점해줄게. 점수 받은 후 위에 입력하고 다시 저장해.</p>
-    </div>
+<!-- ════ TODAY VIEW ════ -->
+<div id="view-today" class="card">
+  <div class="modeswitch">
+    <button class="mode-btn on" data-mode="foundation">기사 분석<small>기사현황·원인·해결·전망</small></button>
+    <button class="mode-btn" data-mode="practice">실전 작성<small>목차→본문→채점</small></button>
   </div>
 
-  <!-- TOPICS VIEW -->
-  <div id="view-topics" class="card" style="display:none">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div class="lbl" style="margin:0">출제 가능 논제</div>
+  <!-- Foundation: 4-panel -->
+  <div id="mode-foundation">
+    <label class="lbl" style="margin-top:16px">📰 오늘 분석할 기사 제목 / 논제 키워드</label>
+    <input type="text" id="f-title" placeholder="예) 가계부채 급증과 금융안정 리스크" />
+
+    <label class="lbl">🗂 기사 분석 — 4칸으로 나눠 써봐</label>
+    <div class="article-grid">
+      <div class="panel">
+        <div class="panel-label"><span class="pl-icon">📌</span>현황 (What)</div>
+        <textarea id="f-status" placeholder="지금 어떤 상황인지&#10;수치·사실 중심으로"></textarea>
+      </div>
+      <div class="panel">
+        <div class="panel-label"><span class="pl-icon">🔍</span>원인 (Why)</div>
+        <textarea id="f-cause" placeholder="왜 이런 상황이&#10;됐는지 구조적 원인"></textarea>
+      </div>
+      <div class="panel">
+        <div class="panel-label"><span class="pl-icon">💡</span>해결방안 (How)</div>
+        <textarea id="f-solution" placeholder="금융기관/정부/&#10;시장의 대응책"></textarea>
+      </div>
+      <div class="panel">
+        <div class="panel-label"><span class="pl-icon">🔭</span>전망 (Outlook)</div>
+        <textarea id="f-outlook" placeholder="앞으로 어떻게&#10;전개될지 예측"></textarea>
+      </div>
     </div>
-    <p class="note" style="margin-top:6px">누르면 실전 작성에 자동으로 채워져. (API 키 연결 후 최신 이슈 기반 자동 생성 가능)</p>
-    <div id="topic-list"></div>
+
+    <label class="lbl">💭 내 생각 / 추가 메모</label>
+    <textarea id="f-thoughts" placeholder="자유롭게 — 찬반, 궁금한 점, 추가 논점 등"></textarea>
+
+    <div class="btn-row">
+      <button class="btn btn-pine" id="f-save">💾 저장</button>
+      <button class="btn btn-ghost" id="f-copy">📋 채팅 채점용 복사</button>
+    </div>
+    <p class="note">저장 후 채팅에 붙여넣으면 논술식 구조로 가르쳐줄게.</p>
   </div>
 
-  <!-- HISTORY VIEW -->
-  <div id="view-history" class="card" style="display:none">
-    <div class="stats">
-      <div class="stat"><b id="stat-total">0</b><span>전체 기록</span></div>
-      <div class="stat"><b id="stat-graded">0</b><span>채점받은 글</span></div>
-      <div class="stat"><b id="stat-avg">—</b><span>평균 점수</span></div>
+  <!-- Practice -->
+  <div id="mode-practice" style="display:none">
+    <label class="lbl">🎯 논제</label>
+    <textarea id="p-topic" style="min-height:52px" placeholder="직접 쓰거나 '논제' 탭에서 골라와."></textarea>
+    <label class="lbl">🧭 목차</label>
+    <textarea id="p-outline" placeholder="서론: ...&#10;본론1: ...&#10;본론2: ...&#10;결론: ..."></textarea>
+    <label class="lbl">✍️ 본문</label>
+    <textarea id="p-body" class="tall" placeholder="목차를 따라 실제 논술을 작성해봐."></textarea>
+    <div class="score-row">
+      <label>채팅 채점 결과</label>
+      <input type="number" id="p-score" min="0" max="100" placeholder="—" />
+      <span>/ 100점</span>
     </div>
-    <div id="history-list" style="margin-top:8px"></div>
+    <div class="btn-row">
+      <button class="btn btn-pine" id="p-save">💾 저장</button>
+      <button class="btn btn-ochre" id="p-copy">📋 채팅 채점용 복사</button>
+    </div>
+    <p class="note">복사 후 채팅에 붙여넣으면 100점 만점으로 채점해줄게. 점수 받은 후 위에 입력하고 다시 저장해.</p>
   </div>
 </div>
+
+<!-- ════ TOPICS VIEW ════ -->
+<div id="view-topics" class="card" style="display:none">
+  <div class="topic-gen-bar">
+    <div class="lbl" style="margin:0;flex:1">출제 가능 논제</div>
+    <button class="btn btn-pine btn-sm" id="gen-topics-btn">✨ AI 논제 생성</button>
+  </div>
+  <p class="note" style="margin-top:4px">누르면 실전 작성에 자동 채워져. AI 생성은 Groq API 키 필요 (설정 탭).</p>
+  <div id="topic-list"></div>
+</div>
+
+<!-- ════ HISTORY VIEW ════ -->
+<div id="view-history" class="card" style="display:none">
+  <div class="stats">
+    <div class="stat"><b id="stat-total">0</b><span>전체 기록</span></div>
+    <div class="stat"><b id="stat-graded">0</b><span>채점받은 글</span></div>
+    <div class="stat"><b id="stat-avg">—</b><span>평균 점수</span></div>
+  </div>
+  <div id="history-list" style="margin-top:8px"></div>
+</div>
+
+<!-- ════ SETTINGS VIEW ════ -->
+<div id="view-settings" class="card" style="display:none">
+  <div class="settings-section">
+    <h3>🐙 GitHub 연동 (데이터 저장)</h3>
+    <div class="field">
+      <label>GitHub Personal Access Token</label>
+      <input type="password" id="s-gh-token" placeholder="ghp_xxxxxxxxxxxxxx" />
+      <div class="help">Settings → Developer settings → Personal access tokens → Fine-grained<br>권한: <b>Contents: Read and write</b> (해당 레포만)</div>
+    </div>
+    <div class="field">
+      <label>레포 (owner/repo)</label>
+      <input type="text" id="s-gh-repo" placeholder="naileditsophia/daily-essay-trainer" />
+    </div>
+    <div class="field">
+      <label>데이터 파일 경로</label>
+      <input type="text" id="s-gh-path" placeholder="data/essays.json" />
+    </div>
+    <button class="btn btn-pine btn-full" id="s-gh-save">GitHub 설정 저장 & 연결 테스트</button>
+  </div>
+
+  <div class="settings-section" style="margin-top:24px">
+    <h3>🤖 Groq API (논제 자동 생성)</h3>
+    <div class="field">
+      <label>Groq API Key</label>
+      <input type="password" id="s-groq-key" placeholder="gsk_xxxxxxxxxxxxxx" />
+      <div class="help"><a href="https://console.groq.com/keys" target="_blank">console.groq.com/keys</a> 에서 무료 발급</div>
+    </div>
+    <button class="btn btn-pine btn-full" id="s-groq-save">Groq 설정 저장</button>
+  </div>
+
+  <div class="settings-section" style="margin-top:24px">
+    <h3>🎯 기타</h3>
+    <div class="field">
+      <label>목표 기관 / 직렬</label>
+      <input type="text" id="s-target" placeholder="예) 서민금융진흥원, 신용보증기금" />
+    </div>
+    <button class="btn btn-ghost btn-full" id="s-misc-save">저장</button>
+    <button class="btn btn-ghost btn-full" style="margin-top:8px;color:var(--rust);border-color:var(--rust)" id="s-clear">⚠️ 로컬 데이터 전체 삭제</button>
+  </div>
+</div>
+</div><!-- /wrap -->
 
 <div id="toast">복사됐어 ✓</div>
 
 <script>
-// ── Storage ──────────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  CONFIG / LOCAL STORAGE
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const LS = {
-  entries: () => JSON.parse(localStorage.getItem('fe_entries') || '[]'),
-  save: (arr) => localStorage.setItem('fe_entries', JSON.stringify(arr)),
-  target: () => localStorage.getItem('fe_target') || '금융 공기업',
-  setTarget: (t) => localStorage.setItem('fe_target', t),
+  get: (k, fb) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch { return fb; } },
+  set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
+  raw: (k) => localStorage.getItem(k) || '',
+  setRaw: (k, v) => localStorage.setItem(k, v),
 };
 
-// ── Seed topics ───────────────────────────────────────────────
-const TOPICS = [
-  { q: '고금리 장기화 국면에서 가계부채 연착륙을 위한 금융정책 방향을 논하라.', tags: ['가계부채','통화정책','금융안정'] },
-  { q: '부동산 PF 부실 위험에 대응하기 위한 금융권의 역할과 정책 과제를 서술하라.', tags: ['부동산PF','건전성규제','구조조정'] },
-  { q: '디지털금융 확산이 금융 소비자 보호에 주는 기회와 위험을 균형 있게 논하라.', tags: ['디지털금융','소비자보호','핀테크'] },
-  { q: '중소기업·소상공인 금융지원의 효과성과 도덕적 해이 문제를 어떻게 조화시킬 것인가.', tags: ['서민금융','도덕적해이','보증제도'] },
-  { q: '기후위기 대응을 위한 금융기관의 ESG 역할과 그린워싱 리스크를 논하라.', tags: ['ESG','기후금융','그린워싱'] },
-  { q: '고령화 사회에서 금융기관이 갖춰야 할 금융복지 역할을 논하라.', tags: ['고령화','금융복지','서민금융'] },
-  { q: '환율 급변동 시 수출입 기업 지원을 위한 금융정책 방안을 서술하라.', tags: ['환율','외환정책','무역금융'] },
+const CFG = {
+  ghToken:  () => LS.raw('cfg_gh_token'),
+  ghRepo:   () => LS.raw('cfg_gh_repo'),
+  ghPath:   () => LS.raw('cfg_gh_path') || 'data/essays.json',
+  groqKey:  () => LS.raw('cfg_groq_key'),
+  target:   () => LS.raw('cfg_target') || '금융 공기업',
+  entries:  () => LS.get('fe_entries', []),
+  saveEntries: (arr) => LS.set('fe_entries', arr),
+};
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  GITHUB SYNC
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let ghFileSha = null;
+
+function setSyncStatus(state, msg) {
+  const dot = document.getElementById('sync-dot');
+  const txt = document.getElementById('sync-msg');
+  dot.className = 'sync-dot' + (state ? ` ${state}` : '');
+  txt.textContent = msg;
+}
+
+async function ghRequest(method, path, body) {
+  const token = CFG.ghToken();
+  const repo  = CFG.ghRepo();
+  if (!token || !repo) return null;
+  const url = `https://api.github.com/repos/${repo}/contents/${path}`;
+  const res = await fetch(url, {
+    method,
+    headers: {
+      Authorization: `token ${token}`,
+      'Content-Type': 'application/json',
+      Accept: 'application/vnd.github+json',
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || res.statusText);
+  }
+  return res.json();
+}
+
+async function ghLoad() {
+  try {
+    setSyncStatus('ing', '불러오는 중…');
+    const data = await ghRequest('GET', CFG.ghPath());
+    ghFileSha = data.sha;
+    const raw = atob(data.content.replace(/\n/g, ''));
+    const json = JSON.parse(raw);
+    LS.saveEntries(json.entries || []);
+    setSyncStatus('ok', `GitHub 연동됨 · ${new Date().toLocaleTimeString('ko-KR')}`);
+    return true;
+  } catch (e) {
+    if (e.message && e.message.includes('Not Found')) {
+      // 파일 없음 — 첫 사용
+      ghFileSha = null;
+      setSyncStatus('ok', 'GitHub 연동됨 (신규)');
+      return true;
+    }
+    setSyncStatus('err', 'GitHub 오류: ' + e.message);
+    return false;
+  }
+}
+
+async function ghSave(entries) {
+  const token = CFG.ghToken();
+  const repo  = CFG.ghRepo();
+  if (!token || !repo) return false;
+  try {
+    setSyncStatus('ing', '저장 중…');
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify({ entries }, null, 2))));
+    const body = {
+      message: `essay update ${new Date().toISOString().slice(0,10)}`,
+      content,
+    };
+    if (ghFileSha) body.sha = ghFileSha;
+    const res = await ghRequest('PUT', CFG.ghPath(), body);
+    ghFileSha = res.content.sha;
+    setSyncStatus('ok', `저장됨 · ${new Date().toLocaleTimeString('ko-KR')}`);
+    return true;
+  } catch (e) {
+    setSyncStatus('err', '저장 오류: ' + e.message);
+    return false;
+  }
+}
+
+async function saveEntry(entry) {
+  const entries = CFG.entries();
+  const idx = entries.findIndex(e => e.id === entry.id);
+  if (idx >= 0) entries[idx] = entry;
+  else entries.unshift(entry);
+  LS.saveEntries(entries);
+  updateHeader();
+  await ghSave(entries);
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  SEED TOPICS (fallback)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let TOPICS = [
+  { q:'고금리 장기화 국면에서 가계부채 연착륙을 위한 금융정책 방향을 논하라.', tags:['가계부채','통화정책','금융안정'] },
+  { q:'부동산 PF 부실 위험에 대응하기 위한 금융권의 역할과 정책 과제를 서술하라.', tags:['부동산PF','건전성규제','구조조정'] },
+  { q:'디지털금융 확산이 금융 소비자 보호에 주는 기회와 위험을 균형 있게 논하라.', tags:['디지털금융','소비자보호','핀테크'] },
+  { q:'중소기업·소상공인 금융지원의 효과성과 도덕적 해이 문제를 어떻게 조화시킬 것인가.', tags:['서민금융','도덕적해이','보증제도'] },
+  { q:'기후위기 대응을 위한 금융기관의 ESG 역할과 그린워싱 리스크를 논하라.', tags:['ESG','기후금융','그린워싱'] },
+  { q:'고령화 사회에서 금융기관이 갖춰야 할 금융복지 역할을 논하라.', tags:['고령화','금융복지','서민금융'] },
+  { q:'환율 급변동 시 수출입 기업 지원을 위한 금융정책 방안을 서술하라.', tags:['환율','외환정책','무역금융'] },
 ];
 
-// ── Date helpers ──────────────────────────────────────────────
-const today = () => new Date().toISOString().slice(0,10);
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  GROQ — 논제 생성
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+async function generateTopics() {
+  const key = CFG.groqKey();
+  if (!key) { toast('Groq API 키를 설정 탭에 입력해줘'); return; }
+  const btn = document.getElementById('gen-topics-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> 생성 중…';
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', Authorization:`Bearer ${key}` },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        temperature: 0.8,
+        max_tokens: 1200,
+        messages: [{
+          role: 'system',
+          content: '당신은 한국 금융공기업 필기시험 출제위원입니다. 최신 금융·경제 이슈 기반으로 논술 문제를 출제합니다.'
+        },{
+          role: 'user',
+          content: `목표 기관: ${CFG.target()}\n\n2024~2025년 최신 금융·경제 이슈를 반영해 출제 가능한 논술 논제를 5개 생성해줘.\n\n반드시 아래 JSON 형식만 출력해 (다른 텍스트 없이):\n[\n  {"q":"논제 전문","tags":["태그1","태그2","태그3"]},\n  ...\n]`
+        }]
+      })
+    });
+    if (!res.ok) throw new Error(`Groq 오류: ${res.status}`);
+    const data = await res.json();
+    const text = data.choices[0].message.content.trim();
+    const clean = text.replace(/```json?|```/g, '').trim();
+    const arr = JSON.parse(clean);
+    if (Array.isArray(arr) && arr.length) {
+      TOPICS = [...arr, ...TOPICS];
+      renderTopics();
+      toast(`AI 논제 ${arr.length}개 생성됐어 ✓`);
+    }
+  } catch (e) {
+    toast('논제 생성 실패: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '✨ AI 논제 생성';
+  }
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  DATE / STREAK HELPERS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const todayStr = () => new Date().toISOString().slice(0,10);
 const fmtKo = (iso) => {
   const d = new Date(iso + 'T00:00:00');
   return `${d.getMonth()+1}월 ${d.getDate()}일 (${['일','월','화','수','목','금','토'][d.getDay()]})`;
 };
 const calcStreak = (entries) => {
   const days = new Set(entries.map(e => e.date));
-  let s = 0, d = new Date();
-  for (;;) {
+  let s = 0;
+  const d = new Date();
+  for (let i = 0; i < 367; i++) {
     const iso = d.toISOString().slice(0,10);
     if (days.has(iso)) { s++; d.setDate(d.getDate()-1); }
-    else if (iso === today() && s === 0) { d.setDate(d.getDate()-1); }
+    else if (iso === todayStr() && s === 0) { d.setDate(d.getDate()-1); }
     else break;
-    if (s > 366) break;
   }
   return s;
 };
 
-// ── Toast ─────────────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  TOAST
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let toastTimer;
 const toast = (msg) => {
+  clearTimeout(toastTimer);
   const el = document.getElementById('toast');
   el.textContent = msg; el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2000);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
 };
 
-// ── Copy helpers ──────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  COPY HELPERS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const copyFoundation = () => {
-  const news = document.getElementById('f-news').value.trim();
+  const title    = document.getElementById('f-title').value.trim();
+  const status   = document.getElementById('f-status').value.trim();
+  const cause    = document.getElementById('f-cause').value.trim();
+  const solution = document.getElementById('f-solution').value.trim();
+  const outlook  = document.getElementById('f-outlook').value.trim();
   const thoughts = document.getElementById('f-thoughts').value.trim();
-  if (!news && !thoughts) { toast('내용을 먼저 입력해줘'); return; }
-  const target = LS.target();
-  const text = [
-    `📋 금융논술 기초 코칭 요청`,
-    ``,
-    `🗓 날짜: ${fmtKo(today())}`,
-    `🏛 목표 기관: ${target}`,
-    ``,
-    `📰 오늘 본 뉴스의 핵심:`,
-    news,
-    ``,
-    `💭 내 생각:`,
-    thoughts,
-    ``,
+  if (!title && !status) { toast('기사 제목 또는 현황을 먼저 입력해줘'); return; }
+  const lines = [
+    `📋 금융논술 기초 코칭 요청`,``,
+    `🗓 날짜: ${fmtKo(todayStr())}`,
+    `🏛 목표 기관: ${CFG.target()}`,``,
+    `📰 기사/주제: ${title}`,``,
+    status   ? `📌 현황:\n${status}\n` : '',
+    cause    ? `🔍 원인:\n${cause}\n` : '',
+    solution ? `💡 해결방안:\n${solution}\n` : '',
+    outlook  ? `🔭 전망:\n${outlook}\n` : '',
+    thoughts ? `💭 내 생각:\n${thoughts}\n` : '',
     `---`,
-    `위 메모를 금융논술 서론·본론·결론 개요로 다시 짜주고, 왜 그렇게 쓰는지 가르쳐줘. 놓친 논점도 짚어줘.`,
-  ].join('\n');
-  navigator.clipboard.writeText(text).then(() => toast('복사됐어 ✓ 채팅에 붙여넣어봐'));
+    `위 분석을 바탕으로 금융논술 서론·본론·결론 개요를 짜주고, 왜 그렇게 쓰는지 알려줘. 놓친 논점도 짚어줘.`,
+  ].filter(Boolean).join('\n');
+  navigator.clipboard.writeText(lines).then(() => toast('복사됐어 ✓ 채팅에 붙여넣어봐'));
 };
 
 const copyPractice = () => {
-  const topic = document.getElementById('p-topic').value.trim();
+  const topic   = document.getElementById('p-topic').value.trim();
   const outline = document.getElementById('p-outline').value.trim();
-  const body = document.getElementById('p-body').value.trim();
+  const body    = document.getElementById('p-body').value.trim();
   if (!topic || !body) { toast('논제와 본문은 필수야'); return; }
-  const target = LS.target();
-  const text = [
-    `📋 금융논술 채점 요청`,
-    ``,
-    `🗓 날짜: ${fmtKo(today())}`,
-    `🏛 목표 기관: ${target}`,
-    ``,
-    `📌 논제:`,
-    topic,
-    ``,
+  const lines = [
+    `📋 금융논술 채점 요청`,``,
+    `🗓 날짜: ${fmtKo(todayStr())}`,
+    `🏛 목표 기관: ${CFG.target()}`,``,
+    `📌 논제:\n${topic}`,``,
     outline ? `📑 목차:\n${outline}\n` : '',
-    `✍️ 본문:`,
-    body,
-    ``,
+    `✍️ 본문:\n${body}`,``,
     `---`,
     `채점 기준(100점): 논제이해(15) / 논리구성(20) / 금융·경제지식(25) / 균형성(15) / 대안제시(15) / 표현(10)`,
-    `항목별 점수+코멘트, 잘한점 2개, 고칠점 3개, 한 단계 높은 답안 방향, 추천 다음 연습 1개로 채점해줘.`,
-  ].filter(l => l !== undefined).join('\n');
-  navigator.clipboard.writeText(text).then(() => toast('복사됐어 ✓ 채팅에 붙여넣어봐'));
+    `항목별 점수+코멘트, 잘한점 2개, 고칠점 3개, 한 단계 높은 답안 방향을 알려줘.`,
+  ].filter(Boolean).join('\n');
+  navigator.clipboard.writeText(lines).then(() => toast('복사됐어 ✓ 채팅에 붙여넣어봐'));
 };
 
-// ── Save helpers ──────────────────────────────────────────────
-const saveFoundation = () => {
-  const news = document.getElementById('f-news').value.trim();
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  SAVE HANDLERS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const saveFoundation = async () => {
+  const title    = document.getElementById('f-title').value.trim();
+  const status   = document.getElementById('f-status').value.trim();
+  const cause    = document.getElementById('f-cause').value.trim();
+  const solution = document.getElementById('f-solution').value.trim();
+  const outlook  = document.getElementById('f-outlook').value.trim();
   const thoughts = document.getElementById('f-thoughts').value.trim();
-  if (!news && !thoughts) { toast('내용을 입력해줘'); return; }
-  const entries = LS.entries();
-  entries.unshift({ id: Date.now(), date: today(), mode: 'foundation', news, thoughts });
-  LS.save(entries);
-  document.getElementById('f-news').value = '';
-  document.getElementById('f-thoughts').value = '';
-  updateHeader();
+  if (!title && !status) { toast('기사 제목 또는 현황을 입력해줘'); return; }
+  const entry = { id: Date.now(), date: todayStr(), mode:'foundation', title, status, cause, solution, outlook, thoughts };
+  const btn = document.getElementById('f-save');
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span> 저장 중…';
+  await saveEntry(entry);
+  ['f-title','f-status','f-cause','f-solution','f-outlook','f-thoughts'].forEach(id => document.getElementById(id).value = '');
+  btn.disabled = false; btn.innerHTML = '💾 저장';
   toast('저장됐어 ✓');
 };
 
-const savePractice = () => {
-  const topic = document.getElementById('p-topic').value.trim();
+const savePractice = async () => {
+  const topic   = document.getElementById('p-topic').value.trim();
   const outline = document.getElementById('p-outline').value.trim();
-  const body = document.getElementById('p-body').value.trim();
-  const scoreStr = document.getElementById('p-score').value;
-  const score = scoreStr ? parseInt(scoreStr) : null;
+  const body    = document.getElementById('p-body').value.trim();
+  const score   = document.getElementById('p-score').value ? parseInt(document.getElementById('p-score').value) : null;
   if (!topic) { toast('논제를 입력해줘'); return; }
-  const entries = LS.entries();
-  entries.unshift({ id: Date.now(), date: today(), mode: 'practice', topic, outline, body, score });
-  LS.save(entries);
-  document.getElementById('p-topic').value = '';
-  document.getElementById('p-outline').value = '';
-  document.getElementById('p-body').value = '';
-  document.getElementById('p-score').value = '';
-  updateHeader();
+  const entry = { id: Date.now(), date: todayStr(), mode:'practice', topic, outline, body, score };
+  const btn = document.getElementById('p-save');
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span> 저장 중…';
+  await saveEntry(entry);
+  ['p-topic','p-outline','p-body','p-score'].forEach(id => document.getElementById(id).value = '');
+  btn.disabled = false; btn.innerHTML = '💾 저장';
   toast('저장됐어 ✓');
 };
 
-// ── Header ────────────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  HEADER
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const updateHeader = () => {
-  const entries = LS.entries();
+  const entries = CFG.entries();
   const s = calcStreak(entries);
   document.getElementById('streak-badge').textContent = `🔥 ${s}일 연속`;
-  document.getElementById('targ-btn').textContent = LS.target() + ' ▾';
+  document.getElementById('targ-btn').textContent = CFG.target() + ' ▾';
 };
 
-// ── Views ─────────────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  VIEWS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const showView = (name) => {
-  ['today','topics','history'].forEach(v => {
+  ['today','topics','history','settings'].forEach(v => {
     document.getElementById(`view-${v}`).style.display = v === name ? '' : 'none';
   });
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.view === name));
   if (name === 'history') renderHistory();
-  if (name === 'topics') renderTopics();
+  if (name === 'topics')  renderTopics();
+  if (name === 'settings') loadSettings();
 };
 
-// ── Topics render ─────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  TOPICS RENDER
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const renderTopics = () => {
   const list = document.getElementById('topic-list');
-  list.innerHTML = TOPICS.map(t => `
-    <div class="topic-item" data-q="${encodeURIComponent(t.q)}">
+  list.innerHTML = TOPICS.map((t,i) => `
+    <div class="topic-item" data-idx="${i}">
       <div class="topic-q">${t.q}</div>
-      <div class="tags">${t.tags.map(k => `<span class="tag">#${k}</span>`).join('')}</div>
+      <div class="tags">${t.tags.map(k=>`<span class="tag">#${k}</span>`).join('')}</div>
     </div>
   `).join('');
   list.querySelectorAll('.topic-item').forEach(el => {
     el.addEventListener('click', () => {
-      document.getElementById('p-topic').value = decodeURIComponent(el.dataset.q);
+      const t = TOPICS[parseInt(el.dataset.idx)];
+      document.getElementById('p-topic').value = t.q;
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('on', b.dataset.mode === 'practice'));
       document.getElementById('mode-foundation').style.display = 'none';
       document.getElementById('mode-practice').style.display = '';
-      document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('on', b.dataset.mode === 'practice'));
       showView('today');
       toast('논제 채워졌어 ✓ 목차·본문 작성해봐');
     });
   });
 };
 
-// ── History render ────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  HISTORY RENDER
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const renderHistory = () => {
-  const entries = LS.entries();
+  const entries = CFG.entries();
   const graded = entries.filter(e => e.mode === 'practice' && e.score != null);
   const avg = graded.length ? Math.round(graded.reduce((s,e)=>s+e.score,0)/graded.length) : null;
   document.getElementById('stat-total').textContent = entries.length;
@@ -378,25 +632,35 @@ const renderHistory = () => {
   document.getElementById('stat-avg').textContent = avg != null ? avg : '—';
 
   const list = document.getElementById('history-list');
-  if (!entries.length) { list.innerHTML = '<div class="empty">아직 기록이 없어.<br>오늘 쓰기에서 첫 글을 써보자 ✍️</div>'; return; }
-
-  list.innerHTML = entries.map(e => `
+  if (!entries.length) {
+    list.innerHTML = '<div class="empty">아직 기록이 없어.<br>오늘 쓰기에서 첫 글을 써보자 ✍️</div>';
+    return;
+  }
+  list.innerHTML = entries.map(e => {
+    const isF = e.mode === 'foundation';
+    const title = isF ? (e.title || '기사 분석') : (e.topic || '실전 논술');
+    return `
     <div class="hentry" data-id="${e.id}">
       <div class="hrow">
         <div style="min-width:0;flex:1">
-          <span class="badge ${e.mode==='foundation'?'badge-f':'badge-p'}">${e.mode==='foundation'?'기초':'실전'}</span>
+          <span class="badge ${isF?'badge-f':'badge-p'}">${isF?'기사분석':'실전'}</span>
           <span style="font-size:12px;color:var(--ink2);margin-left:8px">${fmtKo(e.date)}</span>
-          <div class="htopic">${e.mode==='foundation'?'뉴스메모':e.topic}</div>
+          <div class="htopic">${title}</div>
         </div>
         ${e.score!=null ? `<span class="hscore">${e.score}</span>` : ''}
       </div>
       <div class="detail" id="detail-${e.id}">
-        ${e.mode==='foundation' ? `
-          <div class="pre"><b>뉴스:</b>\n${e.news||''}</div>
-          <div class="pre" style="margin-top:8px"><b>내 생각:</b>\n${e.thoughts||''}</div>
+        ${isF ? `
+          <div class="detail-grid">
+            ${e.status   ? `<div class="detail-panel"><div class="dp-label">📌 현황</div><div class="dp-text">${e.status}</div></div>` : ''}
+            ${e.cause    ? `<div class="detail-panel"><div class="dp-label">🔍 원인</div><div class="dp-text">${e.cause}</div></div>` : ''}
+            ${e.solution ? `<div class="detail-panel"><div class="dp-label">💡 해결방안</div><div class="dp-text">${e.solution}</div></div>` : ''}
+            ${e.outlook  ? `<div class="detail-panel"><div class="dp-label">🔭 전망</div><div class="dp-text">${e.outlook}</div></div>` : ''}
+          </div>
+          ${e.thoughts ? `<div class="pre" style="margin-top:8px"><b>내 생각:</b>\n${e.thoughts}</div>` : ''}
         ` : `
-          ${e.outline?`<div class="pre"><b>목차:</b>\n${e.outline}</div>`:''}
-          <div class="pre" style="margin-top:8px"><b>본문:</b>\n${(e.body||'').slice(0,300)}${(e.body||'').length>300?'\n...':''}</div>
+          ${e.outline ? `<div class="pre"><b>목차:</b>\n${e.outline}</div>` : ''}
+          <div class="pre" style="margin-top:6px"><b>본문:</b>\n${(e.body||'').slice(0,300)}${(e.body||'').length>300?'\n…':''}</div>
           <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
             <label style="font-size:12.5px;font-weight:600;color:var(--ink2)">점수 수정:</label>
             <input type="number" min="0" max="100" value="${e.score??''}" class="score-edit" data-id="${e.id}"
@@ -406,31 +670,81 @@ const renderHistory = () => {
           </div>
         `}
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 
   list.querySelectorAll('.hentry').forEach(el => {
-    el.addEventListener('click', (ev) => {
-      if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'BUTTON') return;
-      const detail = document.getElementById(`detail-${el.dataset.id}`);
-      detail.classList.toggle('open');
+    el.addEventListener('click', ev => {
+      if (ev.target.tagName==='INPUT'||ev.target.tagName==='BUTTON') return;
+      document.getElementById(`detail-${el.dataset.id}`).classList.toggle('open');
     });
   });
   list.querySelectorAll('.score-save').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       const id = parseInt(btn.dataset.id);
       const input = list.querySelector(`.score-edit[data-id="${id}"]`);
       const score = input.value ? parseInt(input.value) : null;
-      const entries = LS.entries();
+      const entries = CFG.entries();
       const idx = entries.findIndex(e => e.id === id);
-      if (idx>=0) { entries[idx].score = score; LS.save(entries); }
+      if (idx >= 0) { entries[idx].score = score; LS.saveEntries(entries); await ghSave(entries); }
       renderHistory();
       toast('점수 저장됐어 ✓');
     });
   });
 };
 
-// ── Event listeners ───────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  SETTINGS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const loadSettings = () => {
+  document.getElementById('s-gh-token').value = CFG.ghToken();
+  document.getElementById('s-gh-repo').value  = CFG.ghRepo();
+  document.getElementById('s-gh-path').value  = CFG.ghPath();
+  document.getElementById('s-groq-key').value = CFG.groqKey();
+  document.getElementById('s-target').value   = CFG.target();
+};
+
+document.getElementById('s-gh-save').addEventListener('click', async () => {
+  const token = document.getElementById('s-gh-token').value.trim();
+  const repo  = document.getElementById('s-gh-repo').value.trim();
+  const path  = document.getElementById('s-gh-path').value.trim() || 'data/essays.json';
+  if (!token || !repo) { toast('토큰과 레포는 필수야'); return; }
+  LS.setRaw('cfg_gh_token', token);
+  LS.setRaw('cfg_gh_repo', repo);
+  LS.setRaw('cfg_gh_path', path);
+  const btn = document.getElementById('s-gh-save');
+  btn.disabled = true; btn.textContent = '연결 테스트 중…';
+  const ok = await ghLoad();
+  btn.disabled = false; btn.textContent = 'GitHub 설정 저장 & 연결 테스트';
+  if (ok) { toast('GitHub 연결 성공 ✓ 기존 데이터 불러왔어'); updateHeader(); renderHistory(); }
+  else toast('연결 실패 — 토큰·레포명 확인해봐');
+});
+
+document.getElementById('s-groq-save').addEventListener('click', () => {
+  const key = document.getElementById('s-groq-key').value.trim();
+  LS.setRaw('cfg_groq_key', key);
+  toast('Groq 키 저장됐어 ✓');
+});
+
+document.getElementById('s-misc-save').addEventListener('click', () => {
+  const t = document.getElementById('s-target').value.trim();
+  if (t) LS.setRaw('cfg_target', t);
+  updateHeader();
+  toast('저장됐어 ✓');
+});
+
+document.getElementById('s-clear').addEventListener('click', () => {
+  if (!confirm('로컬 데이터를 전부 삭제할까? (GitHub 데이터는 유지돼)')) return;
+  ['fe_entries','cfg_gh_token','cfg_gh_repo','cfg_gh_path','cfg_groq_key','cfg_target']
+    .forEach(k => localStorage.removeItem(k));
+  ghFileSha = null;
+  updateHeader();
+  toast('삭제됐어. 설정 탭에서 다시 연결해줘.');
+});
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  EVENT LISTENERS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 document.querySelectorAll('.tab').forEach(t =>
   t.addEventListener('click', () => showView(t.dataset.view))
 );
@@ -438,25 +752,35 @@ document.querySelectorAll('.mode-btn').forEach(btn =>
   btn.addEventListener('click', () => {
     const m = btn.dataset.mode;
     document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('on', b.dataset.mode===m));
-    document.getElementById('mode-foundation').style.display = m==='foundation'?'':'none';
-    document.getElementById('mode-practice').style.display = m==='practice'?'':'none';
+    document.getElementById('mode-foundation').style.display = m==='foundation' ? '' : 'none';
+    document.getElementById('mode-practice').style.display   = m==='practice'   ? '' : 'none';
   })
 );
+
 document.getElementById('f-save').addEventListener('click', saveFoundation);
 document.getElementById('f-copy').addEventListener('click', copyFoundation);
 document.getElementById('p-save').addEventListener('click', savePractice);
 document.getElementById('p-copy').addEventListener('click', copyPractice);
+document.getElementById('gen-topics-btn').addEventListener('click', generateTopics);
+
 document.getElementById('targ-btn').addEventListener('click', () => {
-  const t = window.prompt('목표 기관/직렬을 적어줘', LS.target());
-  if (t) { LS.setTarget(t.trim()); updateHeader(); }
+  const t = window.prompt('목표 기관/직렬을 적어줘', CFG.target());
+  if (t) { LS.setRaw('cfg_target', t.trim()); updateHeader(); }
 });
 
-// ── Init ──────────────────────────────────────────────────────
-updateHeader();
-renderTopics();
-
-// TODO: API 키 발급 후 아래 주석 해제하면 앱 내 자동 채점 활성화
-// const API_KEY = 'sk-ant-...';  // 발급받은 키 입력
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  INIT
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(async () => {
+  updateHeader();
+  renderTopics();
+  if (CFG.ghToken() && CFG.ghRepo()) {
+    await ghLoad();
+    updateHeader();
+  } else {
+    setSyncStatus('', 'GitHub 미연결 — 설정 탭에서 연결해줘');
+  }
+})();
 </script>
 </body>
 </html>
